@@ -7,7 +7,8 @@
                 class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]">
                 <p v-if="searchError">Sorry, something went wrong, please try again.</p>
                 <template v-else>
-                    <li v-for="result in searchResults" :key="result.id" class="py-2 cursor-pointer">
+                    <li @click="previewCity(result)" v-for="result in searchResults" :key="result.id"
+                        class="py-2 cursor-pointer">
                         {{ result.name }} - {{ result.country }}
                     </li>
                 </template>
@@ -19,7 +20,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const searchQuery = ref('');
 const queryTimeOut = ref(0);
 const apiKey: string = '83ec18e22a994908800cd28710fd38b6';
@@ -32,7 +35,7 @@ interface result {
     local_names?: {}
     lon: number
     name: string
-    state: string
+    state?: string
 }
 
 const searchResults = ref<result[]>([]);
@@ -68,6 +71,14 @@ const getGeographicalCoordinates = async () => {
 }
 
 const toLowerCase = (value: string): string => value.toString();
+
+const previewCity = (value: result) => {
+    router.push({
+        name: 'cityView',
+        params: { country: value.country, city: value.name.replace(' ', '') },
+        query: { lat: value.lat, lon: value.lon, preview: 1 }
+    })
+}
 
 
 </script>
