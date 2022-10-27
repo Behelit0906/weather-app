@@ -25,7 +25,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const searchQuery = ref('');
 const queryTimeOut = ref(0);
-const apiKey: string = '83ec18e22a994908800cd28710fd38b6';
+const apiKey: string = import.meta.env.VITE_API_KEY;
 
 
 interface result {
