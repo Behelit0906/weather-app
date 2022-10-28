@@ -75,7 +75,7 @@ const toLowerCase = (value: string): string => value.toString();
 const previewCity = (value: result) => {
     router.push({
         name: 'cityView',
-        params: { country: value.country, city: value.name.replace(' ', '') },
+        params: { country: value.country, city: value.name },
         query: { lat: value.lat, lon: value.lon, preview: 1 }
     })
 }
