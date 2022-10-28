@@ -8,12 +8,12 @@
                 </div>
             </router-link>
             <div class="flex gap-3 flex-1 justify-end">
-                <i @click="toggleModal"
+                <i @click="openModal"
                     class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-150 cursor-pointer"></i>
 
                 <i class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"></i>
             </div>
-            <BaseModalVue :modal-active="modalActive" @close-modal="toggleModal">
+            <BaseModalVue :modal-active="modalActive" @close-modal="closeModal">
                 <div class="text-black">
                     <h1 class="text-2xl mb-1">About:</h1>
                     <p class="mb-4">
@@ -54,9 +54,15 @@ import { ref } from 'vue';
 import BaseModalVue from './BaseModal.vue';
 
 const modalActive = ref(false);
-const toggleModal = (): void => {
-    modalActive.value = !modalActive.value;
-    document.querySelector('body')?.classList.toggle('overflow-hidden');
+
+const openModal = (): void => {
+    modalActive.value = true;
+    document.querySelector('body')?.classList.add('overflow-hidden');
+}
+
+const closeModal = (): void => {
+    modalActive.value = false;
+    document.querySelector('body')?.classList.remove('overflow-hidden')
 }
 
 </script>
