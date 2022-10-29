@@ -11,7 +11,8 @@
                 <i @click="openModal"
                     class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-150 cursor-pointer"></i>
 
-                <i class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"></i>
+                <i @click="addCity" v-if="route.query.preview"
+                    class="fa-solid fa-plus text-xl hover:text-weather-secondary duration-150 cursor-pointer"></i>
             </div>
             <BaseModalVue :modal-active="modalActive" @close-modal="closeModal">
                 <div class="text-black">
@@ -50,8 +51,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, Ref } from 'vue';
 import BaseModalVue from './BaseModal.vue';
+import { uid } from 'uid';
+import { useRoute, useRouter } from 'vue-router';
 
 const modalActive = ref(false);
 
@@ -63,6 +66,37 @@ const openModal = (): void => {
 const closeModal = (): void => {
     modalActive.value = false;
     document.querySelector('body')?.classList.remove('overflow-hidden')
+}
+
+interface city {
+    id: string
+    city: string
+    country: string
+    coords: { lat: number, lon: number }
+}
+
+const savedCities: Ref<city[]> = ref([]);
+const route = useRoute();
+const router = useRouter();
+
+const addCity = () => {
+    const temp = localStorage.getItem('savedCities');
+    if (temp) {
+        savedCities.value = JSON.parse(temp);
+    }
+    const city: city = {
+        id: uid(),
+        city: String(route.params.city),
+        country: String(route.params.country),
+        coords: { lat: Number(route.query.lat), lon: Number(route.query.lon) }
+    }
+
+    savedCities.value.push(city);
+    localStorage.setItem('savedCities', JSON.stringify(savedCities.value));
+
+    let query = Object.assign({}, route.query);
+    delete query.preview;
+    router.replace({ query });
 }
 
 </script>
