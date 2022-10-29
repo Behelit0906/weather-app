@@ -62,7 +62,7 @@ const getSearchResults = () => {
 
 const getGeographicalCoordinates = async () => {
     try {
-        const result = await axios.get(`http://api.openweathermap.org/geo/1.0/direct?q=${toLowerCase(searchQuery.value)}&limit=5&appid=${apiKey}`);
+        const result = await axios.get(`https://api.openweathermap.org/geo/1.0/direct?q=${toLowerCase(searchQuery.value)}&limit=5&appid=${apiKey}`);
 
         const data: result[] = [];
 
