@@ -55,7 +55,7 @@
             </div>
         </div>
 
-        <div @click="removeCity"
+        <div v-if="route.query.id" @click="removeCity"
             class="flex items-center gap-2 py-12 text-white cursor-pointer duration-150 hover:text-red-500">
             <i class="fa-solid fa-trash"></i>
             <p>Remove city</p>
@@ -67,9 +67,10 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
 const apiKey: string = import.meta.env.VITE_API_KEY;
 
 
@@ -178,5 +179,16 @@ const days = computed(() => {
     return [];
 })
 
+
+const removeCity = () => {
+    const temp = localStorage.getItem('savedCities');
+    let cities: any[] = []
+    if (temp) {
+        cities = JSON.parse(temp);
+        cities = cities.filter(e => e.id !== route.query.id);
+        localStorage.setItem('savedCities', JSON.stringify(cities));
+        router.push({ name: 'home' });
+    }
+}
 
 </script>
